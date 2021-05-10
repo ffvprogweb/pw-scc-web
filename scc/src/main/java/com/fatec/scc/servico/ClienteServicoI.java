@@ -32,11 +32,15 @@ public class ClienteServicoI implements ClienteServico{
 		ModelAndView modelAndView = new ModelAndView("consultarCliente");
 		try {
 			String endereco = obtemEndereco(cliente.getCep());
-			if (endereco != "") {
+			if (endereco != null) {
 				cliente.setEndereco(endereco);
 				repository.save(cliente);
-				logger.info(">>>>>> 4. comando save executado  ");
+				logger.info(">>>>>> 4. comando save executado ");
 				modelAndView.addObject("clientes", repository.findAll());
+			}else {
+				logger.info(">>>>>> 4. comando save executado com erro endereço inválido. ");
+				modelAndView.setViewName("cadastrarCliente");
+				modelAndView.addObject("message", "Endereço não localizado.");
 			}
 
 		} catch (Exception e) { // captura validacoes na camada de persistencia
@@ -50,7 +54,8 @@ public class ClienteServicoI implements ClienteServico{
 			}
 		}
 		return modelAndView;
-	}
+}
+
 	public String obtemEndereco(String cep) {
 		RestTemplate template = new RestTemplate();
 		String url = "https://viacep.com.br/ws/{cep}/json/";
