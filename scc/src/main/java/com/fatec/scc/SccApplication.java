@@ -24,15 +24,5 @@ public class SccApplication {
 		SpringApplication.run(SccApplication.class, args);
 	}
 	
-	@Autowired
-	public void inicializa() {
-		Usuario user = new Usuario();
-		user.setNome("Jose");
-		user.setLogin("jose");
-		user.setSenha(passwordEncoder.encode("123"));
-		repository.save(user);
-		Usuario usuario = repository.findByLogin("jose");
-		logger.info(">>>>>> inicializacao da aplicacao => " + usuario.toString());
-	}
-
+	
 }

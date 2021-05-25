@@ -17,22 +17,23 @@ import com.fatec.scc.servico.UserDetailsServiceI;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsServiceI userDetailsService;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
-			.antMatchers(HttpMethod.GET, "/").permitAll()
-			.and().formLogin().loginPage("/login").permitAll()
-			.and().logout().logoutUrl("/login?logout").permitAll()
-		    .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		    .and().authorizeRequests()
-		    .antMatchers("h2-console/**").hasRole("ADMIN")
-		    .anyRequest().authenticated();
-	    
+		http.authorizeRequests().antMatchers("/sig/cliente").hasAnyRole("ADMIN", "BIB") //
+				.antMatchers("/sig/cliente/{id}").hasRole("ADMIN") // somente login jose pode excluir
+				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
+				.defaultSuccessUrl("/", true).and()
+				// sample logout customization
+				.logout().deleteCookies("remove").invalidateHttpSession(false).logoutUrl("/custom-logout")
+				.logoutSuccessUrl("/logout-success");
+
 	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(pc());
+		auth.inMemoryAuthentication().withUser("jose").password(pc().encode("123")).roles("ADMIN").and()
+        .withUser("maria").password(pc().encode("456")).roles("BIB");
 	}
 
 	@Bean
