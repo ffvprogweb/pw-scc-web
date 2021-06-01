@@ -31,6 +31,7 @@ public class ClienteController {
 
 	@GetMapping("/cliente")
 	public ModelAndView retornaFormDeCadastroDe(Cliente cliente) {
+		logger.info(">>>>>> 3. menu chama a pagina de cadastro de cliente");
 		ModelAndView mv = new ModelAndView("cadastrarCliente");
 		mv.addObject("cliente", cliente);
 		return mv;
@@ -55,9 +56,13 @@ public class ClienteController {
 	@PostMapping("/clientes")
 	public ModelAndView save(@Valid Cliente cliente, BindingResult result) {
 		ModelAndView modelAndView = new ModelAndView("consultarCliente");
+		
 		if (result.hasErrors()) {
+			logger.info(">>>>>> 4. controller cadastrar cliente chamado pela view com erro");
+			modelAndView.addObject("message", "Dados invalidos!");
 			modelAndView.setViewName("cadastrarCliente");
 		} else {
+			logger.info(">>>>>> 4. controller cadastrar cliente chamado pela view");
 			modelAndView = servico.saveOrUpdate(cliente);
 		}
 		return modelAndView;

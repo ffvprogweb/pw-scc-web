@@ -2,6 +2,7 @@ package com.fatec.scc.servico;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -33,12 +34,13 @@ public class ClienteServicoI implements ClienteServico{
 		try {
 			String endereco = obtemEndereco(cliente.getCep());
 			if (endereco != null) {
+				cliente.setDataCadastro(new DateTime());
 				cliente.setEndereco(endereco);
 				repository.save(cliente);
-				logger.info(">>>>>> 4. comando save executado ");
+				logger.info(">>>>>> 6. endereço ok comando save executado ");
 				modelAndView.addObject("clientes", repository.findAll());
 			}else {
-				logger.info(">>>>>> 4. comando save executado com erro endereço inválido. ");
+				logger.info(">>>>>> 6. comando save executado com erro endereço inválido. ");
 				modelAndView.setViewName("cadastrarCliente");
 				modelAndView.addObject("message", "Endereço não localizado.");
 			}
@@ -47,10 +49,10 @@ public class ClienteServicoI implements ClienteServico{
 			modelAndView.setViewName("cadastrarCliente");
 			if (e.getMessage().contains("could not execute statement")) {
 				modelAndView.addObject("message", "Dados invalidos - cliente já cadastrado.");
-				logger.info(">>>>>> 5. cliente ja cadastrado ==> " + e.getMessage());
+				logger.info(">>>>>> 6. cliente ja cadastrado ==> " + e.getMessage());
 			} else {
 				modelAndView.addObject("message", "Erro não esperado - contate o administrador");
-				logger.error(">>>>>> 5. erro nao esperado ==> " + e.getMessage());
+				logger.error(">>>>>> 6. erro nao esperado ==> " + e.getMessage());
 			}
 		}
 		return modelAndView;
@@ -60,7 +62,7 @@ public class ClienteServicoI implements ClienteServico{
 		RestTemplate template = new RestTemplate();
 		String url = "https://viacep.com.br/ws/{cep}/json/";
 		Endereco endereco = template.getForObject(url, Endereco.class, cep);
-		logger.info(">>>>>> 3. obtem endereco ==> " + endereco.toString());
+		logger.info(">>>>>> 5. clienteservico obtem endereco ==> " + endereco.toString());
 		return endereco.getLogradouro();
 	}
 }	

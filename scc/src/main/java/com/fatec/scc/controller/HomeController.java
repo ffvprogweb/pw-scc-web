@@ -16,13 +16,13 @@ public class HomeController {
 	Logger logger = LogManager.getLogger(HomeController.class);
 	@GetMapping("/login")
 	public ModelAndView autenticacao() {
-		logger.info(">>>>>> 1. frontcontroller chamou pagina login");
+		logger.info(">>>>>> 1. frontcontroller chamou pagina login no homecontroller");
 		return new ModelAndView("paginaLogin");
 	}
 
 	@GetMapping("/")
 	public ModelAndView home() {
-		logger.info(">>>>>> 1. frontcontroller chamou pagina menu");
+		logger.info(">>>>>> 2. frontcontroller chamou pagina menu no homecontroller");
 		return new ModelAndView ("paginaMenu");
 	}
 	@GetMapping("/logout")

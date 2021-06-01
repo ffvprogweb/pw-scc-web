@@ -5,6 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.*;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 @Entity
 public class Cliente {
 	@Id
@@ -22,13 +26,19 @@ public class Cliente {
 	@NotNull
 	private String cep;
 	private String endereco;
+	private String dataCadastro;
+	private String dataRevisao;
+	
 	public Cliente() {
 	}
+	
 	public Cliente(@NotNull String cpf, @NotNull String nome, @NotNull String email, @NotNull String cep) {
 		this.cpf = cpf;
 		this.nome = nome;
 		this.email = email;
 		this.cep = cep;
+		DateTime dataAtual = new DateTime();
+		setDataCadastro(dataAtual);
 	}
 	public Long getId() {
 		return id;
@@ -66,9 +76,27 @@ public class Cliente {
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
+	
+	public String getDataCadastro() {
+		return dataCadastro;
+	}
+	public void setDataCadastro(DateTime dataAtual) {
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd");
+		this.dataCadastro = dataAtual.toString(fmt);
+		setDataRevisao();
+	}
+	public String getDataRevisao() {
+		return dataRevisao;
+	}
+	public void setDataRevisao() {
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("YYYY/MM/dd");
+		DateTime data = fmt.parseDateTime(getDataCadastro());
+		this.dataRevisao = data.plusDays(360).toString(fmt);
+	}
 	@Override
 	public String toString() {
 		return "Cliente [id=" + id + ", cpf=" + cpf + ", nome=" + nome + ", email=" + email + ", cep=" + cep
-				+ ", endereco=" + endereco + "]";
+				+ ", endereco=" + endereco + ", dataCadastro=" + dataCadastro + ", dataRevisao=" + dataRevisao + "]";
 	}
+	
 }

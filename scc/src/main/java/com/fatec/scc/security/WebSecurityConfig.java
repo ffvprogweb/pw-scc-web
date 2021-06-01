@@ -25,7 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated().and().formLogin().loginPage("/login").permitAll()
 				.defaultSuccessUrl("/", true).and()
 				// sample logout customization
-				.logout().deleteCookies("remove").invalidateHttpSession(false).logoutUrl("/custom-logout")
+				.logout().deleteCookies("remove")
+				.invalidateHttpSession(false).logoutUrl("/custom-logout")
 				.logoutSuccessUrl("/logout-success");
 
 	}
