@@ -37,6 +37,8 @@ programação, selecionando videoaulas, referência bibliográficas, para melhor
 é estabelecido pelo identificador do caso de teste.
 > 2) Depois de executado os casos de teste com 100% de satisfatorios o código deve ser armazenado no github (commit).
 
+##### Casos de teste
+
 | Identificador | Cenário de uso |
 | ------------ | ------------------------------------------------------------------------ |
 | REQ01CT01 | Dado (setup) que o CPF do cliente não está cadastrado; Quando (ação) o usuário confirma o cadastro; Então (resultado esperado) o sistema envia uma mensagem de cadastro realizado com sucesso |
